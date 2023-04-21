@@ -1,0 +1,34 @@
+La lógica de un buscador de artículos en el backend podría seguir los siguientes pasos:
+
+Recopilar información: El buscador debe recopilar la información necesaria para realizar la búsqueda, como las palabras clave y 
+los parámetros de búsqueda seleccionados por el usuario.
+
+Consulta a la base de datos: El buscador debe realizar una consulta a la base de datos del sistema para encontrar los artículos que coincidan con los criterios de búsqueda especificados.
+Esta consulta puede ser realizada usando lenguajes de consulta como SQL.
+
+Filtrar los resultados: Una vez que se han recuperado los artículos relevantes, el buscador debe aplicar filtros adicionales para mejorar la calidad de los resultados. 
+Esto puede incluir la eliminación de duplicados, la eliminación de artículos no disponibles o la eliminación de artículos que no cumplen con los criterios de búsqueda del usuario.
+
+Ordenar los resultados: El buscador debe ordenar los resultados según la relevancia, lo que puede basarse en factores como la coincidencia exacta de palabras clave, 
+la frecuencia de aparición de las palabras clave, la fecha de publicación, etc.
+
+Mostrar los resultados: Finalmente, el buscador debe presentar los resultados de la búsqueda al usuario, posiblemente en forma de una lista ordenada de artículos 
+que cumplen con los criterios de búsqueda especificados.
+
+// 1. Recopilar información
+const query = req.query.q; // Obtener las palabras clave del usuario desde la petición GET
+const filters = req.query.filters; // Obtener los filtros adicionales desde la petición GET
+
+// 2. Consulta a la base de datos
+const articles = await Article.find({ title: { $regex: query, $options: "i" } }); // Realizar una consulta a la base de datos para encontrar los artículos que coinciden con la búsqueda
+
+// 3. Filtrar los resultados
+if (filters) {
+  articles = articles.filter(filters); // Aplicar filtros adicionales, si se especificaron
+}
+
+// 4. Ordenar los resultados
+articles.sort((a, b) => b.date_published - a.date_published); // Ordenar los resultados por fecha de publicación, de forma descendente
+
+// 5. Mostrar los resultados
+res.render('search_results', { articles: articles }); // Presentar los resultados al usuario en una plantilla de resultados de búsqueda

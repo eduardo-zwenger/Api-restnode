@@ -281,7 +281,7 @@ const imagen = (req, res) => {
 
 const buscador = async (req, res) => {
     try {
-      // sacar el strig de busqueda
+      // sacar el string de busqueda
       let busqueda = req.params.busqueda;
   
       // fin OR
